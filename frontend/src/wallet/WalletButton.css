@@ -1,0 +1,123 @@
+.wallet-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--brand-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.wallet-btn:hover:not(:disabled) {
+  background-color: var(--brand-primary-hover);
+}
+
+.wallet-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.wallet-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.wallet-btn--connected {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+}
+
+.wallet-btn--connected:hover {
+  background-color: var(--bg-surface);
+}
+
+.wallet-btn--install {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--brand-primary);
+  text-decoration: none;
+}
+
+.wallet-btn--install:hover {
+  background-color: var(--brand-primary);
+  text-decoration: none;
+}
+
+.wallet-btn__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--brand-accent);
+  flex-shrink: 0;
+}
+
+.wallet-btn__spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: wallet-spin 0.7s linear infinite;
+}
+
+@keyframes wallet-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.wallet-btn__wrap {
+  position: relative;
+}
+
+.wallet-btn__tooltip {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 240px;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.75rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  z-index: 20;
+}
+
+.wallet-btn__tooltip-addr {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+  margin-bottom: 0.5rem;
+}
+
+.wallet-btn__disconnect {
+  width: 100%;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.wallet-btn__disconnect:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.wallet-error {
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
