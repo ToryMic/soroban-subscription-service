@@ -15,6 +15,7 @@ import {
   TESTNET_PASSPHRASE,
   type WalletNetwork,
 } from './freighter'
+import { fetchBalances, type TokenBalance } from './balances'
 
 export type NetworkMismatch =
   | 'unknown'
@@ -28,10 +29,13 @@ export interface WalletState {
   address: string | null
   network: WalletNetwork | null
   networkMismatch: NetworkMismatch
+  balances: TokenBalance[] | null
+  balancesLoading: boolean
   loading: boolean
   error: string | null
   connect: () => Promise<void>
   disconnect: () => void
+  refreshBalances: () => Promise<void>
 }
 
 const WalletContext = createContext<WalletState | null>(null)
@@ -51,8 +55,38 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [connected, setConnected] = useState(false)
   const [address, setAddress] = useState<string | null>(null)
   const [network, setNetwork] = useState<WalletNetwork | null>(null)
+  const [balances, setBalances] = useState<TokenBalance[] | null>(null)
+  const [balancesLoading, setBalancesLoading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const refreshBalances = useCallback(async () => {
+    if (!address || !network) {
+      setBalances(null)
+      return
+    }
+    setBalancesLoading(true)
+    try {
+      const next = await fetchBalances(address, {
+        networkPassphrase: network.passphrase,
+      })
+      setBalances(next)
+      setError(null)
+    } catch (e) {
+      setBalances(null)
+      setError(
+        e instanceof Error
+          ? `Failed to fetch balances: ${e.message}`
+          : 'Failed to fetch balances',
+      )
+    } finally {
+      setBalancesLoading(false)
+    }
+  }, [address, network])
+
+  useEffect(() => {
+    void refreshBalances()
+  }, [refreshBalances])
 
   const sync = useCallback(async () => {
     if (!isFreighterInstalled()) {
@@ -110,6 +144,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     setConnected(false)
     setAddress(null)
     setNetwork(null)
+    setBalances(null)
     setError(null)
   }, [])
 
@@ -120,12 +155,27 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       address,
       network,
       networkMismatch: detectMismatch(connected, network),
+      balances,
+      balancesLoading,
       loading,
       error,
       connect,
       disconnect,
+      refreshBalances,
     }),
-    [installed, connected, address, network, loading, error, connect, disconnect],
+    [
+      installed,
+      connected,
+      address,
+      network,
+      balances,
+      balancesLoading,
+      loading,
+      error,
+      connect,
+      disconnect,
+      refreshBalances,
+    ],
   )
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>

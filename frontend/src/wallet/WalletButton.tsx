@@ -1,10 +1,20 @@
 import { useState } from 'react'
 import { useWallet, truncateAddress } from './WalletContext'
+import { formatBalance } from './balances'
 import './WalletButton.css'
 
 export function WalletButton() {
-  const { installed, connected, address, loading, error, connect, disconnect } =
-    useWallet()
+  const {
+    installed,
+    connected,
+    address,
+    loading,
+    error,
+    balances,
+    balancesLoading,
+    connect,
+    disconnect,
+  } = useWallet()
   const [tooltip, setTooltip] = useState(false)
 
   if (!installed) {
@@ -47,6 +57,22 @@ export function WalletButton() {
         {tooltip && (
           <div className="wallet-btn__tooltip">
             <p className="wallet-btn__tooltip-addr">{address}</p>
+            <div className="wallet-btn__balances">
+              <p className="wallet-btn__balances-title">Balances</p>
+              {balancesLoading && balances === null ? (
+                <p className="wallet-btn__balances-empty">Loading&hellip;</p>
+              ) : balances && balances.length > 0 ? (
+                balances.map((b) => (
+                  <p className="wallet-btn__balance" key={b.code}>
+                    {formatBalance(b.balance, b.code)}
+                  </p>
+                ))
+              ) : (
+                <p className="wallet-btn__balances-empty">
+                  No XLM / USDC balance found
+                </p>
+              )}
+            </div>
             <button
               className="wallet-btn__disconnect"
               onClick={disconnect}

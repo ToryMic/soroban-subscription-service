@@ -1,5 +1,9 @@
 ﻿import { Routes, Route, Link } from 'react-router-dom'
 import { WalletButton, WalletError } from './wallet/WalletButton'
+import { ProviderLayout } from './provider/ProviderLayout'
+import { ProviderDashboard } from './provider/ProviderDashboard'
+import { ProviderPlans } from './provider/ProviderPlans'
+import { ProviderRevenue } from './provider/ProviderRevenue'
 import './App.css'
 
 function Layout({ children }: { children: React.ReactNode }) {
@@ -62,17 +66,6 @@ function Landing() {
   )
 }
 
-function ProviderDashboard() {
-  return (
-    <div style={{ padding: '2rem 0' }}>
-      <h2>Provider Dashboard</h2>
-      <p style={{ color: 'var(--text-secondary)' }}>
-        Manage your plans and view revenue here.
-      </p>
-    </div>
-  )
-}
-
 function SubscriberPortal() {
   return (
     <div style={{ padding: '2rem 0' }}>
@@ -89,7 +82,11 @@ function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/provider/*" element={<ProviderDashboard />} />
+        <Route path="/provider" element={<ProviderLayout />}>
+          <Route index element={<ProviderDashboard />} />
+          <Route path="plans" element={<ProviderPlans />} />
+          <Route path="revenue" element={<ProviderRevenue />} />
+        </Route>
         <Route path="/portal/*" element={<SubscriberPortal />} />
       </Routes>
     </Layout>

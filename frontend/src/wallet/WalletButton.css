@@ -95,6 +95,30 @@
   margin-bottom: 0.5rem;
 }
 
+.wallet-btn__balances {
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.wallet-btn__balances-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.wallet-btn__balance {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.wallet-btn__balances-empty {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .wallet-btn__disconnect {
   width: 100%;
   background-color: var(--bg-surface);
